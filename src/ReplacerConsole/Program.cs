@@ -19,7 +19,7 @@ namespace Replacer
 
         public static void Run(string[] args)
         {
-            if (args.Length != 4)
+            if (args.Length < 4)
                 Help ();
             else {
                 string workingDir = args [0];
@@ -30,16 +30,16 @@ namespace Replacer
 
                 string replaceWith = args [3];
 
-                int number = 0;
+                Console.WriteLine("Working directory: " + workingDir);
+                Console.WriteLine("Query: " + fileQuery);
+                Console.WriteLine("Replace from: " + replaceFrom);
+                Console.WriteLine("Replace with: " + replaceWith);
 
                 var replacer = new Replacer (Path.GetFullPath(workingDir));
                 replacer.IsVerbose = true; // TODO: Allow user to set this via an argument
                 replacer.CommitChanges = true;
 
                 replacer.Replace (fileQuery, replaceFrom, replaceWith);
-
-                Console.WriteLine ("Replace complete.");
-                Console.WriteLine ("# files modified: " + number);
             }
         }
 

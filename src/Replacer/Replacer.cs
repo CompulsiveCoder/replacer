@@ -17,9 +17,9 @@ namespace Replacer
 
         public bool IncludeHidden = false;
 
-        public int FilesModified = 0;
-        public int FileNamesModified = 0;
-        public int DirectoryNamesModified = 0;
+        public int TotalFilesModified = 0;
+        public int TotalFileNamesModified = 0;
+        public int TotalDirectoryNamesModified = 0;
 
         public Replacer (string workingDirectory)
         {
@@ -28,6 +28,8 @@ namespace Replacer
 
         public void Replace(string fileQuery, string replaceFrom, string replaceWith)
         {
+            ClearTotals ();
+
             string[] files = QueryFiles(fileQuery);
 
             foreach (string file in files)
@@ -50,6 +52,13 @@ namespace Replacer
                     }
                 }
             }
+                
+            if (IsVerbose) {
+                Console.WriteLine ("Replace complete.");
+                Console.WriteLine ("# files modified: " + TotalFilesModified);
+                Console.WriteLine ("# file names modified: " + TotalFileNamesModified);
+                Console.WriteLine ("# directory names modified: " + TotalDirectoryNamesModified);
+            }
         }
 
         public void ReplaceInFile(string file, string replaceFrom, string replaceWith)
@@ -65,7 +74,7 @@ namespace Replacer
                 
                     SaveFile (file, content);
 
-                    FilesModified++;
+                    TotalFilesModified++;
                 }
             }
         }
@@ -87,7 +96,7 @@ namespace Replacer
 
                     File.Move (filePath, newFilePath);
 
-                    FileNamesModified++;
+                    TotalFileNamesModified++;
                 }
             }
         }
@@ -104,7 +113,7 @@ namespace Replacer
 
                     Directory.Move (directoryPath, newDirectory);
 
-                    DirectoryNamesModified++;
+                    TotalDirectoryNamesModified++;
                 }
             }
         }
@@ -147,9 +156,9 @@ namespace Replacer
 
         public void ClearTotals()
         {
-            FilesModified = 0;
-            FileNamesModified = 0;
-            DirectoryNamesModified = 0;
+            TotalFilesModified = 0;
+            TotalFileNamesModified = 0;
+            TotalDirectoryNamesModified = 0;
         }
 
         public bool IsHidden(string fileOrDirectoryPath)
