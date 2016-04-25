@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Replacer.Tests
 {
-    [TestFixture]
+    [TestFixture(Category="Integration")]
     public class ReplacerIntegrationTestFixture : BaseTestFixture
     {
         [Test]
