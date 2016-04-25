@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Replacer
 {
@@ -46,7 +49,7 @@ namespace Replacer
             var directories = QueryDirectories (fileQuery);
 
             if (ReplaceInDirectoryNames) {
-                foreach (var directory in directories) {
+                foreach (var directory in  SortByLength (directories)) {
                     if (!IsHidden (directory) || IncludeHidden) {
                         ReplaceInDirectoryName (directory, replaceFrom, replaceWith);
                     }
@@ -109,11 +112,17 @@ namespace Replacer
                     Console.WriteLine (directoryPath);
 
                 if (CommitChanges) {
-                    var newDirectory = directoryPath.Replace (replaceFrom, replaceWith);
+                    var directoryName = Path.GetFileName (directoryPath);
+                    var newDirectoryName = directoryName.Replace (replaceFrom, replaceWith);
+                    var parentDirectoryPath = Path.GetDirectoryName(directoryPath);
 
-                    Directory.Move (directoryPath, newDirectory);
+                    var newDirectory = Path.Combine (parentDirectoryPath, newDirectoryName);
 
-                    TotalDirectoryNamesModified++;
+                    if (!Directory.Exists (newDirectory)) {
+                        Directory.Move (directoryPath, newDirectory);
+
+                        TotalDirectoryNamesModified++;
+                    }
                 }
             }
         }
@@ -165,6 +174,15 @@ namespace Replacer
         {
             return fileOrDirectoryPath.StartsWith(".")
                 || fileOrDirectoryPath.Contains(Path.DirectorySeparatorChar + ".");
+        }
+
+        private IEnumerable<string> SortByLength(IEnumerable<string> e)
+        {
+            // Use LINQ to sort the array received and return a copy.
+            var sorted = from s in e
+                orderby s.Length descending
+                select s;
+            return sorted;
         }
     }
 }

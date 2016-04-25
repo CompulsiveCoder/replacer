@@ -38,6 +38,7 @@ namespace Replacer
                 var replacer = new Replacer (Path.GetFullPath(workingDir));
                 replacer.IsVerbose = true; // TODO: Allow user to set this via an argument
                 replacer.CommitChanges = true;
+                replacer.IncludeSubDirectories = true;
 
                 replacer.Replace (fileQuery, replaceFrom, replaceWith);
             }
