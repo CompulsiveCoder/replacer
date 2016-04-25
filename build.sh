@@ -3,4 +3,4 @@ echo "Dir: $PWD"
 
 DIR=$PWD
 
-xbuild src/townsim.sln /p:Configuration=Release
+xbuild src/replacer.sln /p:Configuration=Release
